@@ -43,7 +43,7 @@ function showFloatingButtons(event) {
     { label: "Convert to Voice", color: "#ea4335" }
   ];
 
-  buttons.forEach(btn => {
+   buttons.forEach(btn => {
     const b = document.createElement("button");
     b.innerText = btn.label;
     Object.assign(b.style, style, { backgroundColor: btn.color });
@@ -54,6 +54,12 @@ function showFloatingButtons(event) {
         b.style.backgroundColor = "yellow";
         console.log("Summarize button clicked");
         showDialog("Summarize", "helloo", container);
+      } else if (btn.label === "Convert to Voice") {
+        console.log("Convert to Voice button clicked");
+        if (selectedText) {
+          const utterance = new SpeechSynthesisUtterance(selectedText);
+          window.speechSynthesis.speak(utterance);
+        }
       } else {
         console.log(`${btn.label} button clicked`);
         // Do nothing for other buttons
