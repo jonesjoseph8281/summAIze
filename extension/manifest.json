@@ -1,13 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Text Summarizer",
+  "name": "Text Assistant",
   "version": "1.0",
-  "description": "Summarizes selected text",
-  "permissions": ["activeTab", "scripting"],
-  "action": {
-    "default_popup": "popup.html",
-    "default_icon": "icons/icon48.png"
-  },
+  "description": "Floating buttons for selected text",
+  "permissions": [],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
