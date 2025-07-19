@@ -1,27 +1,26 @@
-document.getElementById('summarize').addEventListener('click', () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { action: "getSelection" }, (response) => {
-      if (response && response.text) {
-        document.getElementById('summary').textContent = "Processing...";
-        // In a real app, you would send this to your summarization API
-        // For now, we'll just show a shortened version
-        setTimeout(() => {
-          document.getElementById('summary').textContent = 
-            response.text.substring(0, 100) + "... [Summary would appear here]";
-        }, 500);
-      }
-    });
-  });
-});
-
-// Listen for messages from content script
+// Handle messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === "summarize") {
-    document.getElementById('summary').textContent = "Processing...";
-    // This is where you'd normally call your summarization API
+  if (request.action === "processText") {
+    const resultDiv = document.getElementById('result');
+    resultDiv.textContent = `Processing ${request.type} request...`;
+    
+    // In a real app, you would have different API calls for each type
     setTimeout(() => {
-      document.getElementById('summary').textContent = 
-        request.text.substring(0, 100) + "... [Summary would appear here]";
+      let response;
+      switch(request.type) {
+        case "summarize":
+          response = `Summary: ${request.text.substring(0, 100)}...`;
+          break;
+        case "explain":
+          response = `Explanation: This text is about ${request.text.split(' ').length} words long.`;
+          break;
+        case "voice":
+          response = `Voice conversion ready for: ${request.text.substring(0, 50)}...`;
+          break;
+        default:
+          response = "Action completed";
+      }
+      resultDiv.textContent = response;
     }, 500);
   }
 });
