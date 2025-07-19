@@ -47,13 +47,67 @@ function showFloatingButtons(event) {
     const b = document.createElement("button");
     b.innerText = btn.label;
     Object.assign(b.style, style, { backgroundColor: btn.color });
-    b.onmousedown = (e) => { // Use onmousedown instead of onclick
+    b.onmousedown = async (e) => { // Use onmousedown instead of onclick
       e.preventDefault();
       e.stopPropagation();
       if (btn.label === "Summarize") {
         b.style.backgroundColor = "yellow";
         console.log("Summarize button clicked");
-        showDialog("Summarize", "helloo", container);
+
+        if (selectedText) {
+          try {
+            // Send the selected text to the backend
+            const response = await fetch("http://localhost:5000/summarize", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ text: selectedText })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              // Display the generated summary in the popup
+              showDialog("Summary", data.result, container);
+            } else {
+              // Handle errors from the backend
+              showDialog("Error", data.error || "Failed to summarize", container);
+            }
+          } catch (err) {
+            console.error("Error:", err);
+            showDialog("Error", "Failed to connect to the server", container);
+          }
+        }
+      } else if (btn.label === "Explain") {
+        b.style.backgroundColor = "yellow";
+        console.log("Explain button clicked");
+
+        if (selectedText) {
+          try {
+            // Send the selected text to the backend with "explain5" mode
+            const response = await fetch("http://localhost:5000/summarize", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ text: selectedText, mode: "explain5" })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+              // Display the explanation in the popup
+              showDialog("Explanation", data.result, container);
+            } else {
+              // Handle errors from the backend
+              showDialog("Error", data.error || "Failed to explain", container);
+            }
+          } catch (err) {
+            console.error("Error:", err);
+            showDialog("Error", "Failed to connect to the server", container);
+          }
+        }
       } else if (btn.label === "Convert to Voice") {
         console.log("Convert to Voice button clicked");
         if (selectedText) {
