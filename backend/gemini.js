@@ -3,8 +3,7 @@ require('dotenv').config();
 async function getSummary(text, mode = 'basic') {
   const prompts = {
     basic: `Summarize this in 2 lines:\n\n${text}`,
-    explain5: `Explain this as if I'm 5 years old:\n\n${text}`,
-    translate: `Translate this into Hindi:\n\n${text}`
+    explain5: `Explain this as if I'm 5 years old:\n\n${text}`
   };
 
   const response = await fetch(
