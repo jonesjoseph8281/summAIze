@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const { getSummary } = require('./gemini');
-const { saveSummary } = require('./history');
 require('dotenv').config();
 
 const app = express();
@@ -13,8 +12,7 @@ app.post('/summarize', async (req, res) => {
 
   try {
     const result = await getSummary(text, 'basic');
-    await saveSummary({ user_id, input_text: text, output_summary: result, mode: 'basic' });
-    res.json({ result });
+    res.json({ result }); // Directly send Gemini response
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -25,8 +23,7 @@ app.post('/explain', async (req, res) => {
 
   try {
     const result = await getSummary(text, 'explain5');
-    await saveSummary({ user_id, input_text: text, output_summary: result, mode: 'explain5' });
-    res.json({ result });
+    res.json({ result }); // Directly send Gemini response
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

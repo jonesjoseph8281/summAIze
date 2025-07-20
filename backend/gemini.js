@@ -10,8 +10,8 @@ const modelName = "gemini-1.5-flash"; // Or "gemini-1.5-pro", adjust if needed
 // Function to generate text based on mode
 async function getSummary(text, mode = "basic") {
   const prompts = {
-    basic: `Summarize this in 2 lines:\n\n${text}`,
-    explain5: `Explain this as if I'm 5 years old:\n\n${text}`,
+    basic: `Summarize the following text clearly and concisely, preserving its core message::\n\n${text}`,
+    explain5: `Explain the following in simple and easy-to-understand language, using everyday examples if needed:\n\n${text}`,
   };
 
   const model = genAI.getGenerativeModel({ model: modelName });
